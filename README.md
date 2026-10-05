@@ -12,3 +12,6 @@ https://zhangjiahang666.github.io/cp-notes/
 
 ## 桌面版
 Windows 桌面应用见仓库 `cp-notes-app`：https://github.com/zhangjiahang666/cp-notes-app
+
+## 安全提示
+桌面版 exe 为自打包未签名软件，下载或首次运行时 Windows / Chrome 可能提示「未知发布者」或「Windows 已保护你的电脑」，属正常现象。处理：下载时点「保留」，运行时点「更多信息」→「仍要运行」即可。
