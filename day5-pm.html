@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>10.5 · 下午 · 数论与区间优化 · C++ 笔记</title>
+  <link rel="icon" type="image/x-icon" href="icon.ico">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="inner">
+      <a class="brand" href="index.html"><img class="brand-ico" src="icon.ico" alt="">C++ 笔记</a>
+            <nav class="site-nav">
+        <a href="index.html">首页</a>
+        <a href="day1.html">10.1</a>
+        <a href="day2.html">10.2</a>
+        <a href="day3.html">10.3</a>
+        <a href="dfs-bfs.html">10.4</a>
+        <a href="day5.html" class="active">10.5</a>
+        <div class="nav-drop">
+          <span class="nav-drop-btn">其他 ▾</span>
+          <div class="drop-menu">
+            <a href="topics-basic.html">基础语法</a>
+            <a href="topics-algo.html">基础算法</a>
+            <a href="topics-string.html">字符串</a>
+            <a href="topics-dp.html">动态规划</a>
+            <a href="stl-containers.html">STL容器</a>
+            <a href="topics-graph.html">图论</a>
+            <a href="topics-math.html">数学</a>
+            <a href="topics-round.html">周赛题解</a>
+            <a href="topics-prelim.html">初赛篇</a>
+            <a href="summary.html">学习总结</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main"><nav class="crumb"><a href="index.html">首页</a><span class="sep">›</span><a href="day5.html">10.5</a><span class="sep">›</span><span>下午 · 数论与区间优化</span></nav>
+    <div class="hero">
+      <span class="hero-ico">🔢</span>
+      <h1>10.5 · 下午 —— 数论与区间优化</h1>
+      <p class="subtitle">RSA求因子 · 区间取余最大值 · 带修改数组查询 · FC命令校验</p>
+    </div>
+
+    <div class="dashboard">
+      <div class="dash-card"><div class="d-ico">📐</div><div class="d-num">3</div><div class="d-lbl">题目</div></div>
+      <div class="dash-card alt"><div class="d-ico">⚡</div><div class="d-num">O(1)</div><div class="d-lbl">最优复杂度</div></div>
+      <div class="dash-card orange"><div class="d-ico">📊</div><div class="d-num">3</div><div class="d-lbl">分层得分</div></div>
+      <div class="dash-card purple"><div class="d-ico">🛠️</div><div class="d-num">1</div><div class="d-lbl">实操技巧</div></div>
+    </div>
+
+    <section class="card">
+      <h2>① RSA 解密求因子（N = P·Q）</h2>
+      <p>给定 K 次询问，每次给 N、E、D，求正整数 P、Q 满足：</p>
+      <ul style="line-height:1.9;">
+        <li>N = P × Q</li>
+        <li>E × D = (P-1)(Q-1) + 1</li>
+      </ul>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>分数</th><th>做法</th><th>复杂度</th><th>数据范围</th></tr></thead>
+          <tbody>
+            <tr><td>20 分</td><td>枚举 P 从 1 到 N，检查 N%P==0</td><td>O(K·N)</td><td>极小数据</td></tr>
+            <tr><td>60 分</td><td>因数成对，枚举 P 到 √N</td><td>O(K·√N)</td><td>N≤1e9（约 3e4）</td></tr>
+            <tr><td>100 分</td><td>推导一元二次方程，求根公式</td><td>O(K)</td><td>N≤1e18</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:12px;"><b>100 分推导：</b></p>
+      <ul style="line-height:1.9;">
+        <li>φ = (P-1)(Q-1) = N - P - Q + 1</li>
+        <li>E·D = φ + 1 → P + Q = N + 2 - E·D</li>
+        <li>P、Q 是方程 x² - (P+Q)x + N = 0 的两根</li>
+        <li>Δ = (P+Q)² - 4N，先判 Δ ≥ 0 再开根号</li>
+      </ul>
+      <p class="warn">⚠️ Δ &lt; 0 直接输出无解，不判断会负数开根运行异常。</p>
+    </section>
+
+    <section class="card">
+      <h2>② 区间取余最大值</h2>
+      <p>给定 n、L、R，求 [L,R] 区间内整数对 n 取余的最大值。</p>
+      <p><b>思路：</b>余数序列周期为 n，每周期内 0,1,2,...,n-1 循环递增。</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>情况</th><th>答案</th></tr></thead>
+          <tbody>
+            <tr><td>区间中包含某个数 ≡ n-1 (mod n)</td><td><b>n - 1</b></td></tr>
+            <tr><td>不包含 n-1 顶点</td><td><b>R % n</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="warn">复杂度 O(1)，1e9 范围直接过，不能遍历。</p>
+    </section>
+
+    <section class="card">
+      <h2>③ 带修改的数组查询</h2>
+      <p>两类操作：修改某位置的值；查询某元素排序后的位置。修改 5000 次，查询 2×10⁵ 次。</p>
+      <ul style="line-height:1.9;">
+        <li>结构体存 {值, 初始位置}</li>
+        <li>排序规则：先按值升序，值相同按初始位置升序（稳定排序）</li>
+        <li><b>只在修改时重排</b>（最多 5000 次），查询时直接输出位置</li>
+        <li>不要每次查询都排序或遍历找位置</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>🛠️ 实操：FC 命令对比大样例</h2>
+      <p>在输出文件所在文件夹地址栏输入 <code>cmd</code> 回车，执行：</p>
+      <pre><code>FC 我的输出.txt 标准答案.txt</code></pre>
+      <p>输出「找不到差异」就说明完全一致，不用肉眼逐行对。</p>
+    </section>
+
+    <h2>章节导航</h2>
+    <div class="chapter-grid">
+      <a class="chapter-card" href="day5.html">
+        <span class="tag">10.5 · 上午</span>
+        <h4>真题讲评</h4>
+        <p>七道近年真题解析</p>
+      </a>
+      <a class="chapter-card" href="summary.html">
+        <span class="tag">其他</span>
+        <h4>学习总结</h4>
+        <p>五天集训总结</p>
+      </a>
+      <a class="chapter-card" href="index.html">
+        <span class="tag">返回</span>
+        <h4>首页</h4>
+        <p>回到站点总览</p>
+      </a>
+    </div>
+
+    <nav class="pager"><a class="pager-prev" href="day5.html">← 上一页：10.5 上午真题</a><a class="pager-next" href="summary.html">下一页：学习总结 <span class="pg-ico">→</span></a></nav>
+  </main>
+
+  <footer class="site-footer">C++ 笔记 · 编程竞赛知识点与例题学习笔记</footer>
+  <script src="main.js"></script>
+</body>
+</html>
