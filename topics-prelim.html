@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -13,10 +13,11 @@
       <a class="brand" href="index.html"><img class="brand-ico" src="icon.ico" alt="">编程竞赛笔记</a>
             <nav class="site-nav">
         <a href="index.html">首页</a>
-        <a href="day1.html">day1</a>
-        <a href="day2.html">day2</a>
-        <a href="day3.html">day3</a>
-        <a href="dfs-bfs.html">day4</a>
+        <a href="day1.html">10.1</a>
+        <a href="day2.html">10.2</a>
+        <a href="day3.html">10.3</a>
+        <a href="dfs-bfs.html">10.4</a>
+        <a href="day5.html">10.5</a>
         <div class="nav-drop">
           <span class="nav-drop-btn">其他 ▾</span>
           <div class="drop-menu">
@@ -206,13 +207,13 @@ int main() {
 
     <h2>五、初赛复习提纲</h2>
     <div class="card">
-      <p class="lead">按 algo-wiki 初赛篇三天节奏整理：day1 偏「前缀和 / 差分 / 二分答案」的代码手感，day2 偏「栈 / 队列 / 链表 / 堆 / 哈夫曼 / 并查集 / 单调栈」的数据结构性质，day4 偏「最短路 / MST / 图上状态压缩」的图论综合。初赛不写大题，重点是<b>看懂代码 + 口算复杂度 + 性质判定</b>。</p>
+      <p class="lead">按 algo-wiki 初赛篇三天节奏整理：10.1 偏「前缀和 / 差分 / 二分答案」的代码手感，10.2 偏「栈 / 队列 / 链表 / 堆 / 哈夫曼 / 并查集 / 单调栈」的数据结构性质，10.4 偏「最短路 / MST / 图上状态压缩」的图论综合。初赛不写大题，重点是<b>看懂代码 + 口算复杂度 + 性质判定</b>。</p>
       <div class="table-wrap"><table>
         <thead><tr><th>阶段</th><th>重点模块</th><th>复习要点</th></tr></thead>
         <tbody>
-          <tr><td>day1</td><td>一维 / 二维前缀和、差分、二分答案、二分判定 check()</td><td>背熟 <code>s[i]=s[i-1]+a[i]</code>、二维 <code>d[i][j]+=x</code> 差分写法；二分答案模板（l≤r / l&lt;r 两种边界）；能看出「答案单调 → 二分 check」套路</td></tr>
-          <tr><td>day2</td><td>栈 / 队列 / 链表 / 堆 / 哈夫曼树 / 并查集 / 单调栈 / 倍增</td><td>栈的合法性判定、中缀后缀互转；堆每次取两个最小合并（哈夫曼）；并查集 <code>find / merge</code>；单调栈求「左边 / 右边第一个更大元素」</td></tr>
-          <tr><td>day4</td><td>Floyd / Dijkstra / SPFA、Kruskal / Prim MST、图上状压、虚拟点</td><td>邻接表 / 邻接矩阵写法；Dijkstra 不能有负权；Kruskal 排序 + 并查集；能在脑子里模拟一遍 Dijkstra 松弛过程</td></tr>
+          <tr><td>10.1</td><td>一维 / 二维前缀和、差分、二分答案、二分判定 check()</td><td>背熟 <code>s[i]=s[i-1]+a[i]</code>、二维 <code>d[i][j]+=x</code> 差分写法；二分答案模板（l≤r / l&lt;r 两种边界）；能看出「答案单调 → 二分 check」套路</td></tr>
+          <tr><td>10.2</td><td>栈 / 队列 / 链表 / 堆 / 哈夫曼树 / 并查集 / 单调栈 / 倍增</td><td>栈的合法性判定、中缀后缀互转；堆每次取两个最小合并（哈夫曼）；并查集 <code>find / merge</code>；单调栈求「左边 / 右边第一个更大元素」</td></tr>
+          <tr><td>10.4</td><td>Floyd / Dijkstra / SPFA、Kruskal / Prim MST、图上状压、虚拟点</td><td>邻接表 / 邻接矩阵写法；Dijkstra 不能有负权；Kruskal 排序 + 并查集；能在脑子里模拟一遍 Dijkstra 松弛过程</td></tr>
           <tr><td>通用</td><td>进制 / 位运算 / 数据类型 / 复杂度估算</td><td>本专题前四节内容；阅读程序时先口算数组大小、int 溢出、递归层数</td></tr>
         </tbody>
       </table></div>
