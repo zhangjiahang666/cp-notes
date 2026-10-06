@@ -186,7 +186,44 @@ int main() {
       <div class="note">只查词频时用 <code>cnt</code>；要统计「有多少单词以某前缀开头」，需要在前缀末尾节点再累加其子树的 cnt（DFS 求和）。字符集大时把 <code>ch[ ][26]</code> 换成 <code>map&lt;int,int&gt;</code> 或动态开点。</div>
     </div>
 
-    <h2>四、三者怎么选（速记表）</h2>
+    <h2>四、Manacher 回文串算法</h2>
+    <div class="card">
+      <p class="lead">在 O(n) 时间内求字符串中<b>所有回文子串</b>的中心和半径。核心思想：利用已匹配的回文对称性，避免重复比较。</p>
+      <h3>核心概念</h3>
+      <p class="lead">先在字符间插入特殊字符（如 <code>#</code>），把奇数/偶数长度的回文统一处理。<code>p[i]</code> 表示以 i 为中心的最长回文半径。</p>
+      <div class="formula">原串最长回文长度 = max(p[i])</div>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+const int N = 2000005;
+char s[N], t[N];
+int p[N];
+
+int manacher() {
+    int n = strlen(s);
+    t[0] = '^'; t[1] = '#';
+    int m = 2;
+    for (int i = 0; i &lt; n; i++) t[m++] = s[i], t[m++] = '#';
+    t[m] = '$';
+
+    int R = 0, C = 0, ans = 0;
+    for (int i = 1; i &lt; m; i++) {
+        p[i] = (i &lt; R) ? min(R - i, p[2*C - i]) : 1;
+        while (t[i + p[i]] == t[i - p[i]]) p[i]++;
+        if (i + p[i] &gt; R) { R = i + p[i]; C = i; }
+        ans = max(ans, p[i] - 1);
+    }
+    return ans;
+}
+
+int main() {
+    scanf("%s", s);
+    printf("%d\n", manacher());
+    return 0;
+}</code></pre>
+      <div class="tip"><b>关键</b>：R 是当前已匹配回文的最右边界，C 是中心。i 在 R 内时利用对称性初始化 p[i]，避免从 1 开始暴力扩展。</div>
+    </div>
+
+    <h2>五、三者怎么选（速记表）</h2>
     <div class="card">
       <div class="table-wrap"><table>
         <thead><tr><th>你的需求</th><th>选谁</th><th>为什么</th></tr></thead>

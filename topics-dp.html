@@ -213,7 +213,46 @@ for (int i = 1; i &lt;= n; i++)
     }</code></pre>
     </div>
 
-    <h2>六、变种速记表</h2>
+    <h2>六、背包问题</h2>
+    <div class="card">
+      <p class="lead">背包是最经典的 DP 模型：给若干物品，每个有体积 w[i] 和价值 v[i]，在背包容量有限的前提下求最大价值。</p>
+
+      <h3>01 背包（每件物品最多选一次）</h3>
+      <p class="lead"><b>f[j] = 容量为 j 时的最大价值</b>。对每个物品，枚举容量从大到小（保证每件物品只选一次）。</p>
+      <div class="formula">f[j] = max(f[j], f[j-w[i]] + v[i])</div>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+const int N = 1005;
+int w[N], v[N], f[N];
+
+int main() {
+    int n, m; cin &gt;&gt; n &gt;&gt; m;
+    for (int i = 1; i &lt;= n; i++) cin &gt;&gt; w[i] &gt;&gt; v[i];
+    for (int i = 1; i &lt;= n; i++)
+        for (int j = m; j &gt;= w[i]; j--)      // 倒序：保证每件只选一次
+            f[j] = max(f[j], f[j - w[i]] + v[i]);
+    cout &lt;&lt; f[m] &lt;&lt; "\n";
+    return 0;
+}</code></pre>
+
+      <h3>完全背包（每件物品可选无限次）</h3>
+      <p class="lead">和 01 背包唯一区别：容量枚举<b>从小到大</b>，允许同一物品被多次选取。</p>
+      <pre class="codebox"><code>for (int i = 1; i &lt;= n; i++)
+    for (int j = w[i]; j &lt;= m; j++)       // 正序：允许重复选
+        f[j] = max(f[j], f[j - w[i]] + v[i]);</code></pre>
+
+      <h3>对比速记</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>类型</th><th>物品数量</th><th>容量方向</th></tr></thead>
+        <tbody>
+          <tr><td>01 背包</td><td>每件最多 1 次</td><td>倒序（j--）</td></tr>
+          <tr><td>完全背包</td><td>每件无限次</td><td>正序（j++）</td></tr>
+          <tr><td>多重背包</td><td>每件有限次 s[i]</td><td>拆成 s[i] 个物品转 01 背包</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <h2>七、变种速记表</h2>
     <div class="card">
       <p class="lead">同一套「状态 + 二分 + 二维表」思路稍加改造即可覆盖下列变种，记住每个的<b>一句核心转换</b>即可。</p>
       <div class="table-wrap"><table>

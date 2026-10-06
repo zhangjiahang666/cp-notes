@@ -251,29 +251,50 @@ int main() {
       <p class="lead">n+1 只鸽子放进 n 个笼子，至少一个笼子有 ≥2 只。常用：抽屉原理证存在性、求余数分类（mod n 下必有重复余数）。</p>
     </div>
 
-    <h2>十一、线性代数（向量与矩阵）</h2>
+    <h2>十一、矩阵快速幂加速递推</h2>
     <div class="card">
-      <p class="lead">向量点积 a·b = Σ aᵢbᵢ；矩阵乘法 C[i][j] = Σ A[i][k]·B[k][j]。矩阵快速幂可加速递推（如斐波那契数列 O(log n)）。</p>
+      <p class="lead">矩阵快速幂可把线性递推的复杂度从 O(n) 降到 O(log n)。以斐波那契数列为例：</p>
+      <div class="formula">[f(n)  ]   = [1 1]^(n-2) [f(2)]
+          [f(n-1)]     [1 0]       [f(1)]</div>
+      <p class="lead">把转移写成矩阵，然后用快速幂求矩阵的 n 次方，再乘初值向量即可。</p>
       <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
 using namespace std;
 typedef long long ll;
-const int N = 105;
-ll a[N][N], b[N][N], c[N][N];
+const ll MOD = 1e9 + 7;
+
+struct Matrix {
+    ll a[2][2];
+    Matrix operator*(const Matrix&amp; o) {
+        Matrix r;
+        for (int i = 0; i &lt; 2; i++)
+            for (int j = 0; j &lt; 2; j++) {
+                r.a[i][j] = 0;
+                for (int k = 0; k &lt; 2; k++)
+                    r.a[i][j] = (r.a[i][j] + a[i][k] * o.a[k][j]) % MOD;
+            }
+        return r;
+    }
+};
+
+Matrix qpow(Matrix a, ll b) {
+    Matrix r = {1, 0, 0, 1};   // 单位矩阵
+    while (b) {
+        if (b &amp; 1) r = r * a;
+        a = a * a;
+        b &gt;&gt;= 1;
+    }
+    return r;
+}
 
 int main() {
-  int n, m, p; cin &gt;&gt; n &gt;&gt; m &gt;&gt; p;      // a: n*m, b: m*p
-  for (int i = 1; i &lt;= n; i++)
-    for (int j = 1; j &lt;= m; j++) cin &gt;&gt; a[i][j];
-  for (int i = 1; i &lt;= m; i++)
-    for (int j = 1; j &lt;= p; j++) cin &gt;&gt; b[i][j];
-  for (int i = 1; i &lt;= n; i++)
-    for (int k = 1; k &lt;= m; k++)
-      for (int j = 1; j &lt;= p; j++)
-        c[i][j] += a[i][k] * b[k][j];   // 注意累加可能超 int
-  for (int i = 1; i &lt;= n; i++, cout &lt;&lt; "\n")
-    for (int j = 1; j &lt;= p; j++) cout &lt;&lt; c[i][j] &lt;&lt; " ";
-  return 0;
+    ll n; cin &gt;&gt; n;
+    if (n == 1 || n == 2) { cout &lt;&lt; 1 &lt;&lt; "\n"; return 0; }
+    Matrix t = {1, 1, 1, 0};
+    Matrix r = qpow(t, n - 2);
+    cout &lt;&lt; (r.a[0][0] + r.a[0][1]) % MOD &lt;&lt; "\n";
+    return 0;
 }</code></pre>
+      <div class="tip"><b>适用场景</b>：n 很大（如 10¹⁸）的线性递推（斐波那契、阶乘取模、线性 DP 转移），O(log n) 出答案。</div>
     </div>
 
     <div class="tip"><b>速记</b>：判质数试除到 √n；批量质数上欧拉筛；分解质因数试除 + 最小质因子加速；gcd 辗转相除；除法取模找逆元（费马小定理/ exgcd）。</div>

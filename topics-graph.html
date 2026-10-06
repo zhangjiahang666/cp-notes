@@ -189,6 +189,100 @@ while (!dq.empty()) {
 
     <div class="tip"><b>速记</b>：DFS 走到底再回头（回溯、方案数）；BFS 一层一层推（最短路径、最少步数）；0-1 BFS 是带权 BFS 的轻量版；边权任意正数则上 Dijkstra。</div>
 
+    <h2>四、Dijkstra 最短路</h2>
+    <div class="card">
+      <p class="lead">求<b>单源最短路</b>：从起点 s 出发，到图上所有点的最短距离。边权必须<b>非负</b>。思想：每次从未确定的点中挑距离最小的点加入集合，用它松弛邻边。</p>
+      <h3>朴素 Dijkstra（稠密图，O(n²)）</h3>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+const int N = 1005, INF = 1e9;
+int g[N][N], dis[N];
+bool vis[N];
+
+void dijkstra(int s, int n) {
+    for (int i = 1; i &lt;= n; i++) dis[i] = INF;
+    dis[s] = 0;
+    for (int i = 1; i &lt;= n; i++) {
+        int u = -1;
+        for (int j = 1; j &lt;= n; j++)
+            if (!vis[j] &amp;&amp; (u == -1 || dis[j] &lt; dis[u])) u = j;
+        vis[u] = true;
+        for (int v = 1; v &lt;= n; v++)
+            if (dis[v] &gt; dis[u] + g[u][v])
+                dis[v] = dis[u] + g[u][v];
+    }
+}</code></pre>
+      <h3>堆优化 Dijkstra（稀疏图，O((n+m) log n)）</h3>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+typedef pair&lt;int,int&gt; pii;
+const int N = 100005, INF = 1e9;
+vector&lt;pii&gt; adj[N];
+int dis[N];
+bool vis[N];
+
+void dijkstra(int s) {
+    fill(dis, dis + N, INF);
+    dis[s] = 0;
+    priority_queue&lt;pii, vector&lt;pii&gt;, greater&lt;pii&gt;&gt; pq;  // 小根堆 (距离, 点)
+    pq.push({0, s});
+    while (!pq.empty()) {
+        auto [d, u] = pq.top(); pq.pop();
+        if (vis[u]) continue;
+        vis[u] = true;
+        for (auto [v, w] : adj[u])
+            if (dis[v] &gt; dis[u] + w) {
+                dis[v] = dis[u] + w;
+                pq.push({dis[v], v});
+            }
+    }
+}</code></pre>
+      <div class="tip"><b>复杂度选型</b>：n≤1000 用朴素版 O(n²)；n≥10⁵ 用堆优化 O((n+m)log n)。边权有负数不能用 Dijkstra，改 SPFA。</div>
+    </div>
+
+    <h2>五、并查集</h2>
+    <div class="card">
+      <p class="lead">维护「不相交集合」：快速判断两个元素是否在同一集合、合并两个集合。核心操作 <b>find（找祖先）+ union（合并）</b>，加路径压缩后接近 O(1)。</p>
+      <h3>核心思想</h3>
+      <p class="lead">每个集合用一棵树表示，根节点是「集合代表」。<code>find(x)</code> 沿着父指针一直走到根，返回根编号；<code>union(a,b)</code> 就是把 a 的根挂到 b 的根下面。</p>
+      <h3>路径压缩</h3>
+      <p class="lead">find 时把一路上经过的节点直接指向根，下次再查就一步到位。这是并查集快的关键。</p>
+      <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+const int N = 100005;
+int fa[N];
+
+int find(int x) {
+    if (fa[x] != x) fa[x] = find(fa[x]);  // 路径压缩
+    return fa[x];
+}
+
+void unite(int a, int b) {
+    a = find(a); b = find(b);
+    if (a != b) fa[a] = b;
+}
+
+int main() {
+    int n, m; cin &gt;&gt; n &gt;&gt; m;
+    for (int i = 1; i &lt;= n; i++) fa[i] = i;   // 初始化：自己是自己的爹
+    while (m--) {
+        int op, a, b; cin &gt;&gt; op &gt;&gt; a &gt;&gt; b;
+        if (op == 1) unite(a, b);              // 合并
+        else cout &lt;&lt; (find(a) == find(b) ? "Yes" : "No") &lt;&lt; "\n";
+    }
+    return 0;
+}</code></pre>
+      <h3>应用场景</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>场景</th><th>思路</th></tr></thead>
+        <tbody>
+          <tr><td>连通块计数</td><td>每条边 unite 两端点，最后统计有多少个不同的根</td></tr>
+          <tr><td>Kruskal 最小生成树</td><td>边按权排序，能 unite 就加进 MST，直到 n-1 条边</td></tr>
+          <tr><td>判环</td><td>加边前先 find，两端已在同集合则成环</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
     <nav class="chapter-grid" style="margin-top:24px;">
       <a class="chapter-card" href="index.html"><span class="tag">返回</span><h4>返回首页</h4><p>回到站点总览</p></a>
       <a class="chapter-card" href="topics-math.html"><span class="tag">下一专题</span><h4>数学专题</h4><p>质数 · 筛法 · gcd · 快速幂 · 排列组合</p></a>
