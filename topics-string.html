@@ -44,8 +44,10 @@
 
     <h2>一、字符串哈希（滚动哈希）</h2>
     <div class="card">
+      <h3>作用</h3>
       <p class="lead">把一个字符串按「基数 B 的多项式」映射成一个整数：h = s₁·B^(n-1) + s₂·B^(n-2) + … + sₙ。预处理出前缀哈希后，<b>任意一段子串的哈希都能 O(1) 取出</b>，于是两段子串是否相等只需比两个整数。</p>
-      <h3>关键点</h3>
+      <p>什么时候用：需要快速比较多段子串是否相等、判断回文、字符串去重、字符串匹配加速的时候。</p>
+      <h3>常用函数与实现</h3>
       <div class="table-wrap"><table>
         <thead><tr><th>要点</th><th>说明</th></tr></thead>
         <tbody>
@@ -86,12 +88,17 @@ int main() {
 }</code></pre>
       <div class="tip">判回文：正跑一遍 build，再把字符串反转后跑一遍，比较 <code>get(l,r)</code> 与反串对应区间的哈希是否相等即可 O(1) 判定某段是否回文。</div>
       <div class="note">哈希是「概率正确」：极端数据可能被构造出碰撞。要求绝对正确时用双哈希（两组 B/模数）同时比对，或退回 KMP。</div>
+      <h3>相关试题</h3>
+      <p><a href="https://www.tarjanoj.com/p/2051" target="_blank">模板：字符串哈希基础</a></p>
+      <p><a href="https://www.tarjanoj.com/p/1027" target="_blank">判回文字符串</a></p>
     </div>
 
     <h2>二、KMP 模式匹配</h2>
     <div class="card">
+      <h3>作用</h3>
       <p class="lead">在一个长文本串 <b>s</b> 中找模式串 <b>p</b> 的所有出现位置。朴素匹配每次失配都把 p 整体右移一位、指针回退，最坏 O(n·m)；KMP 利用 <b>next 数组</b>让失配时只回退「p 内部」的指针，s 的指针永不回退，做到 O(n+m)。</p>
-      <h3>next 数组的含义</h3>
+      <p>什么时候用：需要在长文本里找一个模式串出现了几次、出现在哪些位置的时候。</p>
+      <h3>常用函数与实现</h3>
       <p class="lead"><code>nxt[i]</code> = 模式串前 <code>i</code> 个字符构成的子串中，<b>最长的相等真前后缀长度</b>（既是前缀又是后缀、且不等于自身的最大长度）。它告诉我们：当前第 <code>i</code> 个字符失配时，p 的指针应该跳到哪个位置继续比，而不是从 0 重来。</p>
       <div class="table-wrap"><table>
         <thead><tr><th>步骤</th><th>做法</th></tr></thead>
@@ -135,12 +142,17 @@ int main() {
     return 0;
 }</code></pre>
       <div class="tip"><b>记忆口诀</b>：next 求的是「p 自己跟自己匹配」，匹配 s 时只是把同一段逻辑再跑一遍——两段代码结构几乎一样。</div>
+      <h3>相关试题</h3>
+      <p><a href="https://www.tarjanoj.com/p/2052" target="_blank">模板：KMP 字符串匹配</a></p>
+      <p><a href="https://www.tarjanoj.com/p/1028" target="_blank">模式串出现次数统计</a></p>
     </div>
 
     <h2>三、Trie 字典树</h2>
     <div class="card">
+      <h3>作用</h3>
       <p class="lead">一棵多叉树：<b>根节点为空，每条边上挂一个字符</b>。从根走到某个节点，路径上的边字符连起来就是一个字符串；多个字符串<b>共享相同的前缀</b>（相同的那一段只存一份）。</p>
-      <h3>关键点</h3>
+      <p>什么时候用：需要快速插入/查询很多字符串、统计前缀出现次数、字典序排序、异或最大值问题的时候。</p>
+      <h3>常用函数与实现</h3>
       <div class="table-wrap"><table>
         <thead><tr><th>操作</th><th>做法</th></tr></thead>
         <tbody>
@@ -184,12 +196,17 @@ int main() {
     return 0;
 }</code></pre>
       <div class="note">只查词频时用 <code>cnt</code>；要统计「有多少单词以某前缀开头」，需要在前缀末尾节点再累加其子树的 cnt（DFS 求和）。字符集大时把 <code>ch[ ][26]</code> 换成 <code>map&lt;int,int&gt;</code> 或动态开点。</div>
+      <h3>相关试题</h3>
+      <p><a href="https://www.tarjanoj.com/p/2053" target="_blank">模板：Trie 字典树基础</a></p>
+      <p><a href="https://www.tarjanoj.com/p/1029" target="_blank">前缀单词统计</a></p>
     </div>
 
     <h2>四、Manacher 回文串算法</h2>
     <div class="card">
+      <h3>作用</h3>
       <p class="lead">在 O(n) 时间内求字符串中<b>所有回文子串</b>的中心和半径。核心思想：利用已匹配的回文对称性，避免重复比较。</p>
-      <h3>核心概念</h3>
+      <p>什么时候用：需要找最长回文子串、统计回文子串个数的时候。</p>
+      <h3>常用函数与实现</h3>
       <p class="lead">先在字符间插入特殊字符（如 <code>#</code>），把奇数/偶数长度的回文统一处理。<code>p[i]</code> 表示以 i 为中心的最长回文半径。</p>
       <div class="formula">原串最长回文长度 = max(p[i])</div>
       <pre class="codebox"><code>#include &lt;bits/stdc++.h&gt;
@@ -221,6 +238,8 @@ int main() {
     return 0;
 }</code></pre>
       <div class="tip"><b>关键</b>：R 是当前已匹配回文的最右边界，C 是中心。i 在 R 内时利用对称性初始化 p[i]，避免从 1 开始暴力扩展。</div>
+      <h3>相关试题</h3>
+      <p><a href="https://www.tarjanoj.com/p/2054" target="_blank">模板：Manacher 最长回文子串</a></p>
     </div>
 
     <h2>五、三者怎么选（速记表）</h2>

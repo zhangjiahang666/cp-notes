@@ -42,7 +42,10 @@
 
     <h2>一、DP 入门心法</h2>
     <div class="card">
+      <h3>作用</h3>
       <p class="lead">动态规划的本质是「把大问题拆成重复的小问题，用一张表把小问题的答案存下来」。写对 DP 只需想清四件事：<b>状态定义 → 转移方程 → 初始化 → 遍历顺序</b>。</p>
+      <p>什么时候用：问题有最优子结构（大最优由小最优拼成）且无后效性（算出后不再被前面影响）的时候。</p>
+      <h3>常用思路与步骤</h3>
       <div class="table-wrap"><table>
         <thead><tr><th>要素</th><th>要回答的问题</th><th>常见写法</th></tr></thead>
         <tbody>
@@ -53,12 +56,18 @@
         </tbody>
       </table></div>
       <div class="tip"><b>自检口诀</b>：状态说不清 → 方程一定错；方程写得出 → 顺序和初始化再检查一遍。答案往往不是 dp[n]，要在整张表里取 max / 累加（如子序列类）。</div>
-      <div class="note">判断能不能用 DP：问题有<b>最优子结构</b>（大最优由小最优拼成）且<b>无后效性</b>（算出后不再被前面影响）。</div>
+      <h3>相关试题</h3>
+      <p><a href="https://www.tarjanoj.com/p/2061" target="_blank">模板：数字三角形 DP</a></p>
+      <p><a href="https://www.tarjanoj.com/p/2062" target="_blank">模板：背包 DP 基础</a></p>
     </div>
 
     <h2>二、最长上升子序列 LIS</h2>
     <div class="card">
-      <h3>状态设计（O(n²) 朴素）</h3>
+      <h3>作用</h3>
+      <p class="lead">在一个序列里找最长的一段「后面的数比前面的大」的子序列（不需要连续）。是 DP 最经典的入门模型。</p>
+      <p>什么时候用：需要找最长上升/下降子序列、导弹拦截、排队布阵之类的问题。</p>
+      <h3>常用函数与实现</h3>
+      <h4>O(n²) 朴素做法</h4>
       <p class="lead"><b>f[i] = 以 a[i] 结尾的最长上升子序列长度</b>。转移：枚举所有 j &lt; i 且 a[j] &lt; a[i]，把 a[i] 接到后面。</p>
       <div class="table-wrap"><table>
         <thead><tr><th>项</th><th>内容</th></tr></thead>
@@ -114,6 +123,9 @@ int main() {
     return 0;
 }</code></pre>
       <div class="tip"><b>二分选型速记</b>：严格上升用 <b>lower_bound</b>（找 ≥ x 替换）；不下降（可相等）改用 <b>upper_bound</b>（找 &gt; x 替换）。下降类则把 d 改成维护「最大结尾」并用手写反向二分。</div>
+      <h3>相关试题</h3>
+      <p><a href="https://www.tarjanoj.com/p/2063" target="_blank">模板：最长上升子序列 LIS</a></p>
+      <p><a href="https://www.tarjanoj.com/p/1030" target="_blank">导弹拦截（下降子序列）</a></p>
     </div>
 
     <h2>三、LIS 的方案与方案数</h2>
